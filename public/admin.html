@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin — DateBrobs</title>
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <header class="site-header">
+    <span class="logo">Date<span class="accent">Brobs</span> <small>admin</small></span>
+    <a href="/" class="admin-link">← voltar ao site</a>
+  </header>
+
+  <main class="container">
+    <section class="panel">
+      <h2>Adicionar foto do Rafuxo</h2>
+      <p class="hint">O apelido é atribuído automaticamente, revezando entre rafa / brocha / brobs.</p>
+      <form id="photoForm">
+        <input type="file" id="photoInput" accept="image/*" required>
+        <button type="submit" class="btn">Adicionar foto</button>
+      </form>
+      <div id="photoGrid" class="photo-grid"></div>
+    </section>
+
+    <section class="panel">
+      <h2>Reação para "Sim"</h2>
+      <form id="yesForm">
+        <input type="file" id="yesImageInput" accept="image/*">
+        <input type="text" id="yesCaptionInput" placeholder="Legenda para o sim">
+        <button type="submit" class="btn">Salvar reação Sim</button>
+      </form>
+      <div id="yesPreview" class="reaction-preview"></div>
+    </section>
+
+    <section class="panel">
+      <h2>Reação para "Não"</h2>
+      <form id="noForm">
+        <input type="file" id="noImageInput" accept="image/*">
+        <input type="text" id="noCaptionInput" placeholder="vai ter que querer sim sou o brojack">
+        <button type="submit" class="btn">Salvar reação Não</button>
+      </form>
+      <div id="noPreview" class="reaction-preview"></div>
+    </section>
+
+    <section class="panel">
+      <h2>Imagens de fundo do site</h2>
+      <p class="hint">Pode subir várias — elas revezam em transição suave atrás de tudo.</p>
+      <form id="bgForm">
+        <input type="file" id="bgInput" accept="image/*" required>
+        <button type="submit" class="btn">Adicionar imagem de fundo</button>
+      </form>
+      <div id="bgGrid" class="photo-grid"></div>
+    </section>
+  </main>
+
+  <script src="admin.js"></script>
+</body>
+</html>

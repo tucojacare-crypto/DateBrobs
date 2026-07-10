@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DateBrobs</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="bgLayerA" class="bg-layer"></div>
+  <div id="bgLayerB" class="bg-layer"></div>
+  <div class="bg-overlay"></div>
+
+  <header class="site-header">
+    <span class="logo">Date<span class="accent">Brobs</span></span>
+    <a href="/admin.html" class="admin-link">admin</a>
+  </header>
+
+  <main class="stage">
+    <div id="loading" class="state-message">Carregando fotos...</div>
+
+    <div id="empty" class="state-message hidden">
+      Nenhuma foto cadastrada ainda.<br>
+      Vá em <a href="/admin.html">admin</a> e adicione algumas.
+    </div>
+
+    <section id="deck" class="deck hidden">
+      <div class="card">
+        <img id="cardImage" src="" alt="Foto">
+        <div class="nickname-tag" id="cardNickname"></div>
+      </div>
+      <div class="actions">
+        <button id="btnNo" class="btn btn-no" aria-label="Não">✕</button>
+        <button id="btnYes" class="btn btn-yes" aria-label="Sim">✓</button>
+      </div>
+      <p class="progress" id="progress"></p>
+    </section>
+
+    <section id="reaction" class="reaction hidden">
+      <img id="reactionImage" src="" alt="Reação">
+      <p id="reactionCaption" class="reaction-caption"></p>
+      <button id="btnContinue" class="btn btn-continue">Continuar</button>
+    </section>
+
+    <section id="summary" class="summary hidden">
+      <h2>Resultado final</h2>
+      <p class="summary-line">✓ Sim: <span id="yesCount">0</span></p>
+      <p class="summary-line">✕ Não: <span id="noCount">0</span></p>
+      <button id="btnRestart" class="btn btn-continue">Recomeçar</button>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
