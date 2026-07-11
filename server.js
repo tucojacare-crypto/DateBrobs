@@ -22,6 +22,19 @@ const REACTION_IDS = {
 
 const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 15 * 1024 * 1024 } });
 
+function requireAdmin(req, res, next) {
+  const auth = req.headers.authorization || '';
+  const [scheme, encoded] = auth.split(' ');
+
+  if (scheme === 'Basic' && encoded) {
+    const [, password] = Buffer.from(encoded, 'base64').toString().split(':');
+    if (password === process.env.ADMIN_PASSWORD) return next();
+  }
+
+  res.set('WWW-Authenticate', 'Basic realm="DateBrobs Admin"');
+  res.status(401).send('Autenticação necessária');
+}
+
 function uploadBuffer(buffer, options) {
   return new Promise((resolve, reject) => {
     const stream = cloudinary.uploader.upload_stream(options, (err, result) => {
@@ -45,6 +58,9 @@ async function listFolder(folder) {
 }
 
 app.use(express.json());
+app.get('/admin.html', requireAdmin, (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'admin.html'));
+});
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/api/photos', async (req, res, next) => {
@@ -58,7 +74,7 @@ app.get('/api/photos', async (req, res, next) => {
   } catch (err) { next(err); }
 });
 
-app.post('/api/photos', upload.single('photo'), async (req, res, next) => {
+app.post('/api/photos', requireAdmin, upload.single('photo'), async (req, res, next) => {
   try {
     if (!req.file) return res.status(400).json({ error: 'Nenhuma foto enviada' });
 
@@ -74,7 +90,7 @@ app.post('/api/photos', upload.single('photo'), async (req, res, next) => {
   } catch (err) { next(err); }
 });
 
-app.delete('/api/photos', async (req, res, next) => {
+app.delete('/api/photos', requireAdmin, async (req, res, next) => {
   try {
     const { id } = req.query;
     if (!id) return res.status(400).json({ error: 'id obrigatorio' });
@@ -90,7 +106,7 @@ app.get('/api/background', async (req, res, next) => {
   } catch (err) { next(err); }
 });
 
-app.post('/api/background', upload.single('image'), async (req, res, next) => {
+app.post('/api/background', requireAdmin, upload.single('image'), async (req, res, next) => {
   try {
     if (!req.file) return res.status(400).json({ error: 'Nenhuma imagem enviada' });
     const result = await uploadBuffer(req.file.buffer, { folder: FOLDERS.background });
@@ -98,7 +114,7 @@ app.post('/api/background', upload.single('image'), async (req, res, next) => {
   } catch (err) { next(err); }
 });
 
-app.delete('/api/background', async (req, res, next) => {
+app.delete('/api/background', requireAdmin, async (req, res, next) => {
   try {
     const { id } = req.query;
     if (!id) return res.status(400).json({ error: 'id obrigatorio' });
@@ -146,14 +162,14 @@ async function saveReaction(type, file, caption) {
   }
 }
 
-app.post('/api/reactions/yes', upload.single('image'), async (req, res, next) => {
+app.post('/api/reactions/yes', requireAdmin, upload.single('image'), async (req, res, next) => {
   try {
     await saveReaction('yes', req.file, req.body.caption);
     res.json({ ok: true });
   } catch (err) { next(err); }
 });
 
-app.post('/api/reactions/no', upload.single('image'), async (req, res, next) => {
+app.post('/api/reactions/no', requireAdmin, upload.single('image'), async (req, res, next) => {
   try {
     await saveReaction('no', req.file, req.body.caption);
     res.json({ ok: true });
